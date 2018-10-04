@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sighUpOnClick(View view){
-        Intent intent= new Intent(this, SighUpActivity);
+        Intent intent= new Intent(this, SignupActivity.class);
         startActivityForResult(intent, 0);
     }
 
