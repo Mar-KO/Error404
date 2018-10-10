@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textMultiLine"
-            android:text='1. Enter you email address and password if you already have an account. If not, press "Sing up" and create one. ' />
+            android:text='1. Enter you email address and password if you already have an account. If not, press "Sign up" and create one. ' />
 
         <Button
             android:id="@+id/returnHelpButton"
