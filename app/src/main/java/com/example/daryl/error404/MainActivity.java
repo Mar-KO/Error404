@@ -17,8 +17,10 @@ public class MainActivity extends AppCompatActivity {
         Intent intent= new Intent(this, SignupActivity.class);
         startActivityForResult(intent, 0);
     }
+
     public void WelcomeOnClick(View view){
         Intent intent= new Intent(this, WelcomeActivity.class);
+
         startActivityForResult(intent, 0);
     }
 
