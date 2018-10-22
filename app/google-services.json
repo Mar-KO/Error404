@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "464576282730",
+    "firebase_url": "https://error404-5fdda.firebaseio.com",
+    "project_id": "error404-5fdda",
+    "storage_bucket": "error404-5fdda.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:464576282730:android:f664919d026b1a25",
+        "android_client_info": {
+          "package_name": "com.example.daryl.error404"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "464576282730-7fgjskthekvo1lmc4smdv40tleotcunl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwp6FuzsnUPUqtAbMnVWVI0pDbGKpqWv8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

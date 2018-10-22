@@ -62,14 +62,15 @@
                     android:id="@+id/signUp"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="Sign up " />
+                    android:text="Sign up "
+                    android:onClick="sighUpOnClick"/>
 
                 <Button
                     android:id="@+id/singIn"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Sing in " />
+                    android:text="Sign in " />
             </LinearLayout>
 
             <Button
