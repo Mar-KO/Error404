@@ -54,7 +54,7 @@ public class SignupActivity extends AppCompatActivity {
         info.put("password", password);
         info.put("accountType", accountType);
 
-        db.child("users").setValue(info);
+        db.child("users").child(email).setValue(info);
 
         
     }
