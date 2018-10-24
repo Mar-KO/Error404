@@ -62,4 +62,9 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
-fastlane/readme.md
+fastlane/readme.mdLYDIA
+MainActivity.java
+activity_main.xml
+WelcomeActivity.java activity_welcome.xml app/src/main/java/com/example/daryl/error404/WelcomeActivity.java
+WelcomeActivity.java
+activity_welcome.xml
