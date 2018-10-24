@@ -73,15 +73,6 @@
                     android:text="Sign in " />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/helpButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="70dp"
-                android:onClick="helpOnClick"
-                android:text="help" />
-
         </LinearLayout>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

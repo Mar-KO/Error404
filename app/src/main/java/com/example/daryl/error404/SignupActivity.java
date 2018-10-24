@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.content.Intent;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,8 +31,8 @@ public class SignupActivity extends AppCompatActivity {
     EditText addLastName;
     EditText addEmail;
     EditText addPassword;
-    Button signUpButton;
     Spinner addAccountType;
+    Intent i = new Intent(this, WelcomeActivity.class);
 
     DatabaseReference databaseAccount;
 
@@ -45,17 +46,23 @@ public class SignupActivity extends AppCompatActivity {
 
         addFirstName = (EditText) findViewById(R.id.firstNameEdit);
         addLastName = (EditText) findViewById(R.id.lastNameEdit);
-        addEmail= (EditText) findViewById(R.id.emailEdit);
+        addEmail = (EditText) findViewById(R.id.emailEdit);
         addPassword = (EditText) findViewById(R.id.passwordEdit);
-        signUpButton = (Button) findViewById(R.id.signupButton);
         addAccountType = (Spinner) findViewById(R.id.accountTypeSpinner);
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addInfos();
-            }
-        });
+
+//        signUpButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                addInfos();
+//
+//                i.putExtra("FIRSTNAME", addFirstName.getText().toString());
+//                i.putExtra("ROLE", addAccountType.getSelectedItem().toString());
+//                startActivity(i);
+//            }
+//        });
+
+
 
         //Create a spinner to choose a date
         mDisplayDate = (TextView) findViewById(R.id.setDate);
@@ -84,6 +91,15 @@ public class SignupActivity extends AppCompatActivity {
 
 
         };
+    }
+
+    public void signUpButton (View view){
+        addInfos();
+        Intent intent = new Intent(this, WelcomeActivity.class);
+        intent.putExtra("FIRSTNAME", addFirstName.getText().toString());
+        intent.putExtra("ROLE", addAccountType.getSelectedItem().toString());
+        startActivity(intent);
+
     }
 
     private void addInfos(){
