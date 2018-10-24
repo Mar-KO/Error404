@@ -1,16 +1,15 @@
 package com.example.daryl.error404;
 
-import android.annotation.SuppressLint;
+
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.EditText;
+
 import android.widget.TextView;
 
 public class WelcomeActivity extends AppCompatActivity {
     String name, role;
     TextView _role, _name;
-    //@SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

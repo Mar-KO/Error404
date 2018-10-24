@@ -39,15 +39,14 @@
                 android:inputType="textPersonName" />
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/dobEdit"
+        <TextView
+            android:id="@+id/setDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
+            android:layout_centerHorizontal="true"
             android:layout_weight="1"
-            android:ems="10"
-            android:hint="Date of Birth (DD/MM/YYYY)"
-            android:inputType="date" />
+            android:text="(Select Date of Birth)"
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/emailEdit"

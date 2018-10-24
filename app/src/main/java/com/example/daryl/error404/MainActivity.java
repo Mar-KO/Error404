@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -33,10 +34,21 @@ public class MainActivity extends AppCompatActivity {
         sEmail=email.getText().toString();
         sPassword=password.getText().toString();
 
-
+        if(verifyEmailPassword(sEmail,sPassword)){
+            Toast.makeText(this,"Enter information properly please", Toast.LENGTH_SHORT);
+        }
+        else{
         Intent intent= new Intent(this, WelcomeActivity.class);
         intent.putExtra("EMAIL", sEmail);
         startActivity(intent);
+        }
+    }
+
+    public boolean verifyEmailPassword(String email, String pWord){
+            return !((email == null) || email.isEmpty() ||
+                    (pWord == null) || pWord.isEmpty());
+
+
     }
 
 }
