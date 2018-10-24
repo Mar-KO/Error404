@@ -11,10 +11,13 @@ public class Account {
     String passeword;
     String firstName;
     String lastName;
-    DatePicker dateOfBirth;
+    String dateOfBirth;
     String email;
+    String id;
 
-    public Account(String typeOfAccount, String passeword, String firstName, String lastName, DatePicker dateOfBirth, String email){
+
+    public Account(String id, String firstName, String lastName, String dateOfBirth, String email, String passeword, String typeOfAccount){
+        this.id = id;
         this.typeOfAccount = typeOfAccount;
         this.passeword = passeword;
         this.firstName = firstName;
@@ -26,6 +29,9 @@ public class Account {
     //Setters methods
     //In case the user has to change their info
 
+    public void setId(String newId){
+        id = newId;
+    }
     public void setTypeOfAccount(String newTypeOfAccount){
         typeOfAccount = newTypeOfAccount;
 
@@ -41,7 +47,7 @@ public class Account {
     public void setLastName(String newLastName){
         lastName = newLastName;
     }
-    public void setDateOfBirth(DatePicker newdateOfBirth){
+    public void setDateOfBirth(String newdateOfBirth){
         dateOfBirth = newdateOfBirth;
     }
     public void setEmail(String newEmail) {
@@ -66,7 +72,7 @@ public class Account {
         return lastName;
     }
 
-    public DatePicker getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 

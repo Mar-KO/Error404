@@ -5,10 +5,18 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 
@@ -18,15 +26,42 @@ public class SignupActivity extends AppCompatActivity {
     private TextView mDisplayDate;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
+    EditText addFirstName;
+    EditText addLastName;
+    EditText addEmail;
+    EditText addPassword;
+    Button signUpButton;
+    Spinner addAccountType;
+
+    DatabaseReference databaseAccount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        mDisplayDate = (TextView) findViewById(R.id.setDate);
 
+        databaseAccount = FirebaseDatabase.getInstance().getReference("account");
+
+
+        addFirstName = (EditText) findViewById(R.id.firstNameEdit);
+        addLastName = (EditText) findViewById(R.id.lastNameEdit);
+        addEmail= (EditText) findViewById(R.id.emailEdit);
+        addPassword = (EditText) findViewById(R.id.passwordEdit);
+        signUpButton = (Button) findViewById(R.id.signupButton);
+        addAccountType = (Spinner) findViewById(R.id.accountTypeSpinner);
+
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addInfos();
+            }
+        });
+
+        //Create a spinner to choose a date
+        mDisplayDate = (TextView) findViewById(R.id.setDate);
         mDisplayDate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick (View view) {
+            public void onClick(View view) {
                 Calendar cal = Calendar.getInstance();
                 int year = cal.get(Calendar.YEAR);
                 int month = cal.get(Calendar.MONTH);
@@ -38,23 +73,40 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
-        mDateSetListener = new DatePickerDialog.OnDateSetListener(){
-
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day){
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
-                Log.d(TAG, "onDateSet: mm/dd/yyyy: " + month + "/" + day + "/" +  year);
+                Log.d(TAG, "onDateSet: mm/dd/yyyy: " + month + "/" + day + "/" + year);
                 String date = month + "/" + day + "/" + year;
                 mDisplayDate.setText(date);
             }
 
+
         };
+    }
 
-        public void signUpOnclick(View view){
+    private void addInfos(){
 
-        }
-        private boolean verification(){
-            
+        String firstName = addFirstName.getText().toString().trim();
+        String lastName = addLastName.getText().toString().trim();
+        String email = addEmail.getText().toString().trim();
+        String password = addPassword.getText().toString().trim();
+        String accountType = addAccountType.getSelectedItem().toString();
+        String date = mDisplayDate.getText().toString();
+
+        if(!(TextUtils.isEmpty(firstName)|| TextUtils.isEmpty(lastName)||TextUtils.isEmpty(email)||TextUtils.isEmpty(password)|| TextUtils.isEmpty(accountType)|| TextUtils.isEmpty(date))){
+            String id = databaseAccount.push().getKey();
+
+            Account account = new Account(id, firstName, lastName, date, email, password, accountType );
+
+            databaseAccount.child(id).setValue(account);
+
+            Toast.makeText(this, "Account added", Toast.LENGTH_LONG).show();
+
+        } else{
+            Toast.makeText(this, "You must fill all the field before signing up", Toast.LENGTH_LONG).show();
         }
     }
+
 }

@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "464576282730",
-    "firebase_url": "https://error404-5fdda.firebaseio.com",
-    "project_id": "error404-5fdda",
-    "storage_bucket": "error404-5fdda.appspot.com"
+    "project_number": "882845259303",
+    "firebase_url": "https://error404-9ba15.firebaseio.com",
+    "project_id": "error404-9ba15",
+    "storage_bucket": "error404-9ba15.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:464576282730:android:f664919d026b1a25",
+        "mobilesdk_app_id": "1:882845259303:android:f664919d026b1a25",
         "android_client_info": {
           "package_name": "com.example.daryl.error404"
         }
       },
       "oauth_client": [
         {
-          "client_id": "464576282730-7fgjskthekvo1lmc4smdv40tleotcunl.apps.googleusercontent.com",
+          "client_id": "882845259303-5t4486ul2ui88b3ce9jdm2dgg7uqdsu7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDwp6FuzsnUPUqtAbMnVWVI0pDbGKpqWv8"
+          "current_key": "AIzaSyC_oJ81-pq8j0By9MXdFTDekaj4P3KzW0A"
         }
       ],
       "services": {
