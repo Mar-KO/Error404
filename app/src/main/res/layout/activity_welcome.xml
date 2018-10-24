@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:gravity="center"
-            android:text="Welcome" />
+            android:text="@string/welcome" />
 
         <TextView
             android:id="@+id/nameText"
@@ -29,13 +29,15 @@
             android:layout_width="match_parent"
             android:layout_height="99dp"
             android:gravity="center"
-            android:text="you are log in as" />
+            android:text="@string/you_are_log_in_as" />
 
         <TextView
             android:id="@+id/roleText"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:gravity="center" />
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="visible" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
