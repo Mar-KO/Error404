@@ -15,7 +15,6 @@ public class Account {
     String email;
     String id;
 
-
     public Account(String id, String firstName, String lastName, String dateOfBirth, String email, String passeword, String typeOfAccount){
         this.id = id;
         this.typeOfAccount = typeOfAccount;
@@ -23,7 +22,6 @@ public class Account {
         this.firstName = firstName;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
-
     }
 
     //Setters methods
