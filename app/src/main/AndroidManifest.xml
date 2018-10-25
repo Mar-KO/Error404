@@ -21,7 +21,7 @@
             android:label="Sign Up">
 
         </activity>
-        <activity android:name=".Help"></activity>
+        <activity android:name=".WelcomeActivity"></activity>
     </application>
 
 </manifest>

@@ -113,7 +113,7 @@ public class SignupActivity extends AppCompatActivity {
         else{ return !(fName == null || fName.isEmpty() ||
                 lName == null || lName.isEmpty() ||
                 pWord == null || pWord.isEmpty() ||
-                email == null || email.isEmpty() ||
+                email == null || email.isEmpty() || 
                 dob == null || dob.isEmpty());
         }
     }

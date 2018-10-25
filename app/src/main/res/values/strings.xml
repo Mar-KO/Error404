@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Error404</string>
+    <string name="you_are_log_in_as">you are log in as</string>
+    <string name="welcome">welcome</string>
+    <string name="sign_in">sign in</string>
+    <string name="password">password</string>
 </resources>
