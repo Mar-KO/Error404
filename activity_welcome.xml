@@ -12,37 +12,32 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/welcomeText"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="@string/welcome" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/nameText"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:gravity="center"
-            android:text="TextView" />
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="99dp"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="@string/you_are_log_in_as" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/roleText"
             android:layout_width="match_parent"
             android:layout_height="100dp"
+            android:layout_gravity="center"
             android:gravity="center"
-            android:text="TextView" />
+            android:visibility="visible" />
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Button" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

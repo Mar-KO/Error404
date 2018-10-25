@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:text="Welcome to service 101!"
+                android:text="@string/welcome_to_service_101"
                 android:textColorLink="@color/colorPrimary"
                 android:textSize="24sp" />
 
@@ -37,8 +37,9 @@
                 android:layout_marginTop="50dp"
                 android:ems="10"
                 android:gravity="center"
-                android:hint="Enter your email "
-                android:inputType="textEmailAddress" />
+                android:hint="@string/enter_your_email"
+                android:inputType="textEmailAddress"
+                android:autofillHints="" />
 
             <EditText
                 android:id="@+id/password"
@@ -48,8 +49,9 @@
                 android:layout_marginTop="50dp"
                 android:ems="10"
                 android:gravity="center"
-                android:hint="Password"
-                android:inputType="textPassword" />
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:importantForAutofill="no" />
 
             <LinearLayout
                 android:layout_width="205dp"
@@ -62,7 +64,7 @@
                     android:id="@+id/signUp"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="Sign up "
+                    android:text="@string/sign_up"
                     android:onClick="sighUpOnClick"/>
 
                 <Button
@@ -70,7 +72,8 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Sign in " />
+                    android:onClick="WelcomeOnClick"
+                    android:text="@string/sign_in" />
             </LinearLayout>
 
         </LinearLayout>
