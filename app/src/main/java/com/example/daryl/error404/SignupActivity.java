@@ -1,71 +1,51 @@
+
 package com.example.daryl.error404;
 
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.Toast;
-import android.content.Intent;
-
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.Calendar;
 
 public class SignupActivity extends AppCompatActivity {
-
+    EditText firstNameEdit;
+    EditText lastNameEdit;
+    TextView dobEdit;
+    EditText emailEdit;
+    EditText passwordEdit;
+    Spinner accountTypeSpinner;
+    DatabaseReference db;
     private final String TAG = "MainActivity";
     private TextView mDisplayDate;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
-
-    EditText addFirstName;
-    EditText addLastName;
-    EditText addEmail;
-    EditText addPassword;
-    Spinner addAccountType;
-    Intent i = new Intent(this, WelcomeActivity.class);
-
-    DatabaseReference databaseAccount;
-
+    public static boolean hasAdmin=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-
-        databaseAccount = FirebaseDatabase.getInstance().getReference("account");
-
-
-        addFirstName = (EditText) findViewById(R.id.firstNameEdit);
-        addLastName = (EditText) findViewById(R.id.lastNameEdit);
-        addEmail = (EditText) findViewById(R.id.emailEdit);
-        addPassword = (EditText) findViewById(R.id.passwordEdit);
-        addAccountType = (Spinner) findViewById(R.id.accountTypeSpinner);
-
-
-//        signUpButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                addInfos();
-//
-//                i.putExtra("FIRSTNAME", addFirstName.getText().toString());
-//                i.putExtra("ROLE", addAccountType.getSelectedItem().toString());
-//                startActivity(i);
-//            }
-//        });
-
-
-
+        db = FirebaseDatabase.getInstance().getReference();
         //Create a spinner to choose a date
-        mDisplayDate = (TextView) findViewById(R.id.setDate);
+        mDisplayDate =  findViewById(R.id.setDate);
+        firstNameEdit =  findViewById(R.id.firstNameEdit);
+        lastNameEdit =  findViewById(R.id.lastNameEdit);
+        dobEdit =  findViewById(R.id.setDate);
+        emailEdit =  findViewById(R.id.emailEdit);
+        passwordEdit =  findViewById(R.id.passwordEdit);
+        accountTypeSpinner =  findViewById(R.id.accountTypeSpinner);
+
         mDisplayDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,36 +73,49 @@ public class SignupActivity extends AppCompatActivity {
         };
     }
 
-    public void signUpButton (View view){
-        addInfos();
-        Intent intent = new Intent(this, WelcomeActivity.class);
-        intent.putExtra("FIRSTNAME", addFirstName.getText().toString());
-        intent.putExtra("ROLE", addAccountType.getSelectedItem().toString());
-        startActivity(intent);
+    public void signUpClick(View v)
+    {
+        String firstName = firstNameEdit.getText().toString();
+        String lastName = lastNameEdit.getText().toString();
+        String dob = dobEdit.getText().toString();
+        String email = emailEdit.getText().toString();
+        String password = passwordEdit.getText().toString();
+        String accountType = accountTypeSpinner.getSelectedItem().toString();
 
-    }
-
-    private void addInfos(){
-
-        String firstName = addFirstName.getText().toString().trim();
-        String lastName = addLastName.getText().toString().trim();
-        String email = addEmail.getText().toString().trim();
-        String password = addPassword.getText().toString().trim();
-        String accountType = addAccountType.getSelectedItem().toString();
-        String date = mDisplayDate.getText().toString();
-
-        if(!(TextUtils.isEmpty(firstName)|| TextUtils.isEmpty(lastName)||TextUtils.isEmpty(email)||TextUtils.isEmpty(password)|| TextUtils.isEmpty(accountType)|| TextUtils.isEmpty(date))){
-            String id = databaseAccount.push().getKey();
-
-            Account account = new Account(id, firstName, lastName, date, email, password, accountType );
-
-            databaseAccount.child(id).setValue(account);
-
-            Toast.makeText(this, "Account added", Toast.LENGTH_LONG).show();
-
-        } else{
-            Toast.makeText(this, "You must fill all the field before signing up", Toast.LENGTH_LONG).show();
+        Map<String, Object> info = new HashMap<>();
+        if(verifyInfo(firstName,lastName,password,email,dob)) {
+            info.put("firstName", firstName);
+            info.put("lastName", lastName);
+            info.put("dateOfBirth", dob);
+            info.put("email", email);
+            info.put("password", password);
+            info.put("accountType", accountType);
+            db.child("users").child(email).setValue(info);
+            hasAdmin=true;
+            Intent i = new Intent(this, WelcomeActivity.class);
+            i.putExtra("FIRSTNAME", firstName);
+            i.putExtra("ROLE", accountType);
+            startActivity(i);
+        }
+        else{
+            Toast.makeText(this,"Your infomation are not entered properly", Toast.LENGTH_LONG).show();
         }
     }
 
+    private boolean verifyInfo(String fName, String lName, String pWord, String email, String dob) {
+
+        if ((accountTypeSpinner.getSelectedItem().toString().equals("Admin")) && !hasAdmin) {
+            if(pWord!="admin" || fName!="admin"){
+                return false;}
+            else{
+                return true;
+            }
+        }
+        else{ return !(fName == null || fName.isEmpty() ||
+                lName == null || lName.isEmpty() ||
+                pWord == null || pWord.isEmpty() ||
+                email == null || email.isEmpty() ||
+                dob == null || dob.isEmpty());
+        }
+    }
 }
