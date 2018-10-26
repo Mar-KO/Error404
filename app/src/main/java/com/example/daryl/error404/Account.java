@@ -9,10 +9,9 @@ public class Account {
     String lastName;
     String dateOfBirth;
     String email;
-    String id;
-    public Account(String id, String firstName, String lastName, String dateOfBirth, String email, String passeword, String typeOfAccount){
-        this.id = id;
-        this.typeOfAccount = typeOfAccount;
+   // String id;
+    public Account( String firstName, String lastName, String dateOfBirth, String email, String passeword){
+
         this.passeword = passeword;
         this.firstName = firstName;
         this.dateOfBirth = dateOfBirth;
@@ -20,9 +19,7 @@ public class Account {
     }
     //Setters methods
     //In case the user has to change their info
-    public void setId(String newId){
-        id = newId;
-    }
+
     public void setTypeOfAccount(String newTypeOfAccount){
         typeOfAccount = newTypeOfAccount;
     }
