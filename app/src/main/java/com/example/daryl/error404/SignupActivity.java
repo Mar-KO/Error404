@@ -68,14 +68,6 @@ public class SignupActivity extends AppCompatActivity {
         passwordEdit = findViewById(R.id.passwordEdit);
         accountTypeSpinner = findViewById(R.id.accountTypeSpinner);
 
-        //transforme les champs remplit en String
-         firstName = firstNameEdit.getText().toString();
-         lastName = lastNameEdit.getText().toString();
-         dob = dobEdit.getText().toString();
-         email = emailEdit.getText().toString();
-         password = passwordEdit.getText().toString();
-         accountType = accountTypeSpinner.getSelectedItem().toString();
-        Account currentAccount= createAccount();
 
         //Le listener et la méthode onCLick du date picker
         mDisplayDate.setOnClickListener(new View.OnClickListener() {
@@ -109,8 +101,17 @@ public class SignupActivity extends AppCompatActivity {
 
     //methode du bouton sign up
     public void signUpClick(View v) {
+        //transforme les champs remplit en String
+        firstName = firstNameEdit.getText().toString();
+        lastName = lastNameEdit.getText().toString();
+        dob = dobEdit.getText().toString();
+        email = emailEdit.getText().toString();
+        password = passwordEdit.getText().toString();
+        accountType = accountTypeSpinner.getSelectedItem().toString();
+        Account currentAccount= createAccount();
+
         //vérifie si tous les champs sont remplit correctement
-        if (verifyInfo(firstName, lastName, password, email, dob, accountType)) {
+        if (verifyInfo(firstName, lastName, password, email, dob)) {
 
             //ajoute le Account à firebase
             db.child("users").child(email).setValue(currentAccount);
@@ -127,7 +128,7 @@ public class SignupActivity extends AppCompatActivity {
         }
     }
 
-    private boolean verifyInfo(String fName, String lName, String dob, String email, String pWord, String aType) {
+    private boolean verifyInfo(String fName, String lName, String dob, String email, String pWord) {
             return !(fName == null || fName.isEmpty() ||
                     lName == null || lName.isEmpty() ||
                     pWord == null || pWord.isEmpty() ||
