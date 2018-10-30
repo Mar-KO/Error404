@@ -1,4 +1,5 @@
 package com.example.daryl.error404;
+<<<<<<< HEAD
 
 import android.widget.DatePicker;
 
@@ -13,12 +14,10 @@ public class Account {
     String lastName;
     String dateOfBirth;
     String email;
-    String id;
 
+   // String id;
+    public Account( String firstName, String lastName, String dateOfBirth, String email, String passeword){
 
-    public Account(String id, String firstName, String lastName, String dateOfBirth, String email, String passeword, String typeOfAccount){
-        this.id = id;
-        this.typeOfAccount = typeOfAccount;
         this.passeword = passeword;
         this.firstName = firstName;
         this.dateOfBirth = dateOfBirth;
@@ -29,12 +28,8 @@ public class Account {
     //Setters methods
     //In case the user has to change their info
 
-    public void setId(String newId){
-        id = newId;
-    }
     public void setTypeOfAccount(String newTypeOfAccount){
         typeOfAccount = newTypeOfAccount;
-
     }
     public void setPasseword(String newPasseword){
         passeword = newPasseword;
@@ -56,7 +51,7 @@ public class Account {
 
     //Getters methods
     //To get the info of the user
-
+    
     public String getTypeOfAccount(){
         return typeOfAccount;
     }

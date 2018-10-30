@@ -1,64 +1,75 @@
 package com.example.daryl.error404;
 
-import android.app.DatePickerDialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
-
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+import android.app.DatePickerDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
+import android.widget.DatePicker;
+import android.widget.TextView;
 
 public class SignupActivity extends AppCompatActivity {
+    //Création de variables représentant les champs de la page sign up
+    private EditText firstNameEdit;
+    private EditText lastNameEdit;
+    private TextView dobEdit;
+    private EditText emailEdit;
+    private EditText passwordEdit;
+    private Spinner accountTypeSpinner;
+    private static ArrayList<Account> accountList;
+    DatabaseReference db;
 
+    //Variables nécessaires à la création du spinner pour les dates
     private final String TAG = "MainActivity";
     private TextView mDisplayDate;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
-    EditText addFirstName;
-    EditText addLastName;
-    EditText addEmail;
-    EditText addPassword;
-    Button signUpButton;
-    Spinner addAccountType;
+    //Les données que l'utilisateur rentre dans l'application
+    String firstName ;
+    String lastName ;
+    String dob ;
+    String email ;
+    String password ;
+    String accountType ;
+    Account currentAccount;
 
-    DatabaseReference databaseAccount;
+    //Variables boolean qui servira pour vérifier si un compte admin a déjà été créer
+    public static boolean hasAdmin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        databaseAccount = FirebaseDatabase.getInstance().getReference("account");
-
-
-        addFirstName = (EditText) findViewById(R.id.firstNameEdit);
-        addLastName = (EditText) findViewById(R.id.lastNameEdit);
-        addEmail= (EditText) findViewById(R.id.emailEdit);
-        addPassword = (EditText) findViewById(R.id.passwordEdit);
-        signUpButton = (Button) findViewById(R.id.signupButton);
-        addAccountType = (Spinner) findViewById(R.id.accountTypeSpinner);
-
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addInfos();
-            }
-        });
-
+        accountList = new ArrayList<Account>();
+        db = FirebaseDatabase.getInstance().getReference();
         //Create a spinner to choose a date
-        mDisplayDate = (TextView) findViewById(R.id.setDate);
+        mDisplayDate = findViewById(R.id.setDate);
+
+        //Prend l'information des champs remplit
+        firstNameEdit = findViewById(R.id.firstNameEdit);
+        lastNameEdit = findViewById(R.id.lastNameEdit);
+        dobEdit = findViewById(R.id.setDate);
+        emailEdit = findViewById(R.id.emailEdit);
+        passwordEdit = findViewById(R.id.passwordEdit);
+        accountTypeSpinner = findViewById(R.id.accountTypeSpinner);
+
+
+        //Le listener et la méthode onCLick du date picker
         mDisplayDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,12 +78,14 @@ public class SignupActivity extends AppCompatActivity {
                 int month = cal.get(Calendar.MONTH);
                 int day = cal.get(Calendar.DAY_OF_MONTH);
 
+                //Le style du date picker
                 DatePickerDialog dialog = new DatePickerDialog(SignupActivity.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener, year, month, day);
                 dialog.getWindow().setBackgroundDrawable((new ColorDrawable((Color.TRANSPARENT))));
                 dialog.show();
             }
         });
 
+        //Création d'une objet date picker lorsque l'on clique sur "Select a date"
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -86,27 +99,82 @@ public class SignupActivity extends AppCompatActivity {
         };
     }
 
-    private void addInfos(){
+    //methode du bouton sign up
+    public void signUpClick(View v) {
+        //transforme les champs remplit en String
+        firstName = firstNameEdit.getText().toString();
+        lastName = lastNameEdit.getText().toString();
+        dob = dobEdit.getText().toString();
+        email = emailEdit.getText().toString();
+        password = passwordEdit.getText().toString();
+        accountType = accountTypeSpinner.getSelectedItem().toString();
+        Account currentAccount= createAccount();
 
-        String firstName = addFirstName.getText().toString().trim();
-        String lastName = addLastName.getText().toString().trim();
-        String email = addEmail.getText().toString().trim();
-        String password = addPassword.getText().toString().trim();
-        String accountType = addAccountType.getSelectedItem().toString();
-        String date = mDisplayDate.getText().toString();
+        //vérifie si tous les champs sont remplit correctement
+        if (verifyInfo(firstName, lastName, password, email, dob)) {
 
-        if(!(TextUtils.isEmpty(firstName)|| TextUtils.isEmpty(lastName)||TextUtils.isEmpty(email)||TextUtils.isEmpty(password)|| TextUtils.isEmpty(accountType)|| TextUtils.isEmpty(date))){
-            String id = databaseAccount.push().getKey();
+            //ajoute le Account à firebase
+            db.child("users").child(email).setValue(currentAccount);
+            accountList.add(currentAccount);
 
-            Account account = new Account(id, firstName, lastName, date, email, password, accountType );
-
-            databaseAccount.child(id).setValue(account);
-
-            Toast.makeText(this, "Account added", Toast.LENGTH_LONG).show();
-
-        } else{
-            Toast.makeText(this, "You must fill all the field before signing up", Toast.LENGTH_LONG).show();
+            //Ouvre l'activité activity_Welome
+            Intent i = new Intent(this, WelcomeActivity.class);
+            i.putExtra("FIRSTNAME", firstName);
+            i.putExtra("ROLE", accountType);
+            //  i.putExtra("EMAIL", email);
+            startActivity(i);
+        } else {
+            Toast.makeText(this, "Your infomation are not entered properly", Toast.LENGTH_LONG).show();
         }
     }
+
+    private boolean verifyInfo(String fName, String lName, String dob, String email, String pWord) {
+            return !(fName == null || fName.isEmpty() ||
+                    lName == null || lName.isEmpty() ||
+                    pWord == null || pWord.isEmpty() ||
+                    email == null || email.isEmpty() ||
+                    dob == null || dob.isEmpty());
+    }
+    //Méthode qui vérifie s'il y a déjà un administrateur
+    private boolean verifyAdmin() {
+        if (accountTypeSpinner.getSelectedItem().toString().equals("Admin")) {
+            if ((password != "admin") || (firstName != ("admin"))) {
+                hasAdmin = false;
+            } else {
+                hasAdmin = true;
+            }
+        }
+        return hasAdmin;
+
+    }
+
+    //creates an account depending on the type
+    public Account createAccount() {
+        Account temp=null;
+
+        switch (accountTypeSpinner.getSelectedItem().toString()) {
+            case ("Admin"):
+                temp = new AdminAccount(firstNameEdit.getText().toString(),
+                                        lastNameEdit.getText().toString(),
+                                        dobEdit.getText().toString(),
+                                        emailEdit.getText().toString(),
+                                        passwordEdit.getText().toString());
+                break;
+            case ("Provider") : temp=new ProviderAccount(firstNameEdit.getText().toString(),
+                                                        lastNameEdit.getText().toString(),
+                                                        dobEdit.getText().toString(),
+                                                        emailEdit.getText().toString(),
+                                                        passwordEdit.getText().toString());
+            break;
+            case("User") : temp= new UserAccount(firstNameEdit.getText().toString(),
+                                                lastNameEdit.getText().toString(),
+                                                dobEdit.getText().toString(),
+                                                emailEdit.getText().toString(),
+                                                passwordEdit.getText().toString());
+            break;
+        }
+        return temp;
+    }
+
 
 }

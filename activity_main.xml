@@ -25,6 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
+                android:text="Welcome to service 101!"
                 android:textColorLink="@color/colorPrimary"
                 android:textSize="24sp" />
 
@@ -36,9 +37,8 @@
                 android:layout_marginTop="50dp"
                 android:ems="10"
                 android:gravity="center"
-                android:hint="enter your email"
-                android:inputType="textEmailAddress"
-                android:autofillHints="" />
+                android:hint="Enter your email "
+                android:inputType="textEmailAddress" />
 
             <EditText
                 android:id="@+id/password"
@@ -48,9 +48,8 @@
                 android:layout_marginTop="50dp"
                 android:ems="10"
                 android:gravity="center"
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:importantForAutofill="no" />
+                android:hint="Password"
+                android:inputType="textPassword" />
 
             <LinearLayout
                 android:layout_width="205dp"
@@ -63,7 +62,7 @@
                     android:id="@+id/signUp"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="sign up"
+                    android:text="Sign up "
                     android:onClick="sighUpOnClick"/>
 
                 <Button
@@ -71,8 +70,7 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:onClick="WelcomeOnClick"
-                    android:text="@string/sign_in" />
+                    android:text="Sign in " />
             </LinearLayout>
 
         </LinearLayout>
