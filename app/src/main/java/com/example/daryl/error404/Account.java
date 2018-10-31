@@ -9,7 +9,7 @@ public class Account {
     String lastName;
     String dateOfBirth;
     String email;
-   // String id;
+    public Account(){}
     public Account( String firstName, String lastName, String dateOfBirth, String email, String passeword){
 
         this.passeword = passeword;
