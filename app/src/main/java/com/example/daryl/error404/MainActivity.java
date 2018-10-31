@@ -1,15 +1,18 @@
 package com.example.daryl.error404;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
+import com.google.firebase.database.ValueEventListener;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -18,7 +21,9 @@ public class MainActivity extends AppCompatActivity {
 
     EditText email;
     EditText password;
-
+    String sEmail,sPassword;
+    String id;
+    boolean verdict=false;
     //Instance pour entrer données dans firebase
     DatabaseReference db;
     @Override
@@ -26,7 +31,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        db = FirebaseDatabase.getInstance().getReference();
+        db = FirebaseDatabase.getInstance().getReference("users");
+        //On va chercher les données entrées par l'utilisateur
+        email= findViewById(R.id.userName);
+        password=findViewById(R.id.password);
     }
 
     //Méthode pour le bouton sign up de la page d'accueil. Amène vers une page sign up
@@ -38,27 +46,42 @@ public class MainActivity extends AppCompatActivity {
     //Méthode lorsque l'utilisateur a déjà un compte et souhaite se connecter
     public void WelcomeOnClick(View view){
 
-        //On va chercher les données entrées par l'utilisateur
-        email= findViewById(R.id.userName);
-        password=findViewById(R.id.password);
-
         //On convertit les EditText en leur string
-        String sEmail,sPassword;
         sEmail=email.getText().toString();
         sPassword=password.getText().toString();
-
-        //On vérifie si l'utilisateur a entré des données dans les champs demandés
-
         //Si l'utilisateur n'a pas bien entré les donnés, un toast apparaît et l'avertit
         if(verifyEmailPassword(sEmail,sPassword)){
             Toast.makeText(this,"Enter information properly please", Toast.LENGTH_SHORT);
         }
+        else {
 
-        //Si l'utilisateur a bien entré les donnés, on l'envoie vers une page welcome
-        else{
-            Intent intent= new Intent(this, WelcomeActivity.class);
-            intent.putExtra("EMAIL", sEmail);
-            startActivity(intent);
+            db.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        Account currentAccount = ds.getValue(Account.class);
+                        if (currentAccount.getEmail().equals(sEmail) && currentAccount.getPasseword().equals(sPassword)) {
+                            verdict = true;
+                            id=ds.getKey();
+                            break;
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+            //Si l'utilisateur a bien entré les donnés, on l'envoie vers une page welcome
+            if(verdict){
+                Intent intent= new Intent(this, WelcomeActivity.class);
+                intent.putExtra("ID", id);
+                startActivity(intent);
+            }
+            else {
+                Toast.makeText(this,"The email or password is incorrect",Toast.LENGTH_SHORT ).show();
+            }
         }
     }
 

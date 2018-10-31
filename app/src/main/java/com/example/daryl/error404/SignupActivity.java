@@ -1,6 +1,7 @@
 package com.example.daryl.error404;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,13 +9,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -39,16 +45,16 @@ public class SignupActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
     //Les données que l'utilisateur rentre dans l'application
-    String firstName ;
-    String lastName ;
-    String dob ;
-    String email ;
-    String password ;
-    String accountType ;
-    Account currentAccount;
+    String firstName;
+    String lastName;
+    String dob;
+    String email;
+    String password;
+    String accountType;
+
 
     //Variables boolean qui servira pour vérifier si un compte admin a déjà été créer
-    public static boolean hasAdmin = false;
+    private boolean hasAdmin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,70 +114,87 @@ public class SignupActivity extends AppCompatActivity {
         email = emailEdit.getText().toString();
         password = passwordEdit.getText().toString();
         accountType = accountTypeSpinner.getSelectedItem().toString();
-        Account currentAccount= createAccount();
+        Account currentAccount = createAccount();
+        verifyAdmin();
+        if (hasAdmin == true && accountType=="Admin") {
+            Toast.makeText(this, "There is already an Admin", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            //vérifie si tous les champs sont remplit correctement
+            if (verifyInfo(firstName, lastName, password, email, dob)) {
 
-        //vérifie si tous les champs sont remplit correctement
-        if (verifyInfo(firstName, lastName, password, email, dob)) {
+                //ajoute le Account à firebase
+                String idDB = db.push().getKey();
+                db.child("users").child(idDB).setValue(currentAccount);
+                accountList.add(currentAccount);
 
-            //ajoute le Account à firebase
-            db.child("users").child(email).setValue(currentAccount);
-            accountList.add(currentAccount);
-
-            //Ouvre l'activité activity_Welome
-            Intent i = new Intent(this, WelcomeActivity.class);
-            i.putExtra("FIRSTNAME", firstName);
-            i.putExtra("ROLE", accountType);
-            //  i.putExtra("EMAIL", email);
-            startActivity(i);
-        } else {
-            Toast.makeText(this, "Your infomation are not entered properly", Toast.LENGTH_LONG).show();
+                //Ouvre l'activité activity_Welome
+                Intent i = new Intent(this, WelcomeActivity.class);
+                i.putExtra("ID", idDB);
+                startActivity(i);
+            }
+            else {
+                Toast.makeText(this, "Your infomation are not entered properly", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
     private boolean verifyInfo(String fName, String lName, String dob, String email, String pWord) {
-            return !(fName == null || fName.isEmpty() ||
-                    lName == null || lName.isEmpty() ||
-                    pWord == null || pWord.isEmpty() ||
-                    email == null || email.isEmpty() ||
-                    dob == null || dob.isEmpty());
+        return !(fName == null || fName.isEmpty() ||
+                lName == null || lName.isEmpty() ||
+                pWord == null || pWord.isEmpty() ||
+                email == null || email.isEmpty() ||
+                dob == null || dob.isEmpty());
     }
+
     //Méthode qui vérifie s'il y a déjà un administrateur
-    private boolean verifyAdmin() {
-        if (accountTypeSpinner.getSelectedItem().toString().equals("Admin")) {
-            if ((password != "admin") || (firstName != ("admin"))) {
-                hasAdmin = false;
-            } else {
-                hasAdmin = true;
+    private void verifyAdmin() {
+
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Account account = ds.getValue(Account.class);
+                    if (account.getTypeOfAccount().equals("Admin")) {
+                        hasAdmin = true;
+                    }
+                }
             }
-        }
-        return hasAdmin;
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
     //creates an account depending on the type
     public Account createAccount() {
-        Account temp=null;
+        Account temp = null;
 
         switch (accountTypeSpinner.getSelectedItem().toString()) {
             case ("Admin"):
                 temp = new AdminAccount(firstNameEdit.getText().toString(),
-                                        lastNameEdit.getText().toString(),
-                                        dobEdit.getText().toString(),
-                                        emailEdit.getText().toString(),
-                                        passwordEdit.getText().toString());
+                        lastNameEdit.getText().toString(),
+                        dobEdit.getText().toString(),
+                        emailEdit.getText().toString(),
+                        passwordEdit.getText().toString());
                 break;
-            case ("Provider") : temp=new ProviderAccount(firstNameEdit.getText().toString(),
-                                                        lastNameEdit.getText().toString(),
-                                                        dobEdit.getText().toString(),
-                                                        emailEdit.getText().toString(),
-                                                        passwordEdit.getText().toString());
-            break;
-            case("User") : temp= new UserAccount(firstNameEdit.getText().toString(),
-                                                lastNameEdit.getText().toString(),
-                                                dobEdit.getText().toString(),
-                                                emailEdit.getText().toString(),
-                                                passwordEdit.getText().toString());
-            break;
+            case ("Provider"):
+                temp = new ProviderAccount(firstNameEdit.getText().toString(),
+                        lastNameEdit.getText().toString(),
+                        dobEdit.getText().toString(),
+                        emailEdit.getText().toString(),
+                        passwordEdit.getText().toString());
+                break;
+            case ("User"):
+                temp = new UserAccount(firstNameEdit.getText().toString(),
+                        lastNameEdit.getText().toString(),
+                        dobEdit.getText().toString(),
+                        emailEdit.getText().toString(),
+                        passwordEdit.getText().toString());
+                break;
         }
         return temp;
     }
