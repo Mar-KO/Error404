@@ -6,7 +6,9 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,7 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class WelcomeActivity extends AppCompatActivity {
-    String name, role;// email;
+    String name=null, role=null;// email;
     TextView _role, _name;
     //DatabaseReference db;
     @Override
@@ -32,5 +34,15 @@ public class WelcomeActivity extends AppCompatActivity {
         _name.setText(name);
         _role= findViewById(R.id.roleText);
         _role.setText(role);
+    }
+
+    public void continueOnClick(View v){
+        if(role!=null && role.equals("Admin")) {
+            Intent i = new Intent(this, AdminService.class);
+            startActivity(i);
+        }
+        else{
+            Toast.makeText(this,"not an Admin", Toast.LENGTH_SHORT).show();
+        }
     }
 }

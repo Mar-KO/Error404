@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Méthode pour vérifier si l'utilisateur à bien remplit les deux champs
     public boolean verifyEmailPassword(String email, String pWord){
-        return !((email == null) || email.isEmpty() ||
+        return ((email == null) || email.isEmpty() ||
                 (pWord == null) || pWord.isEmpty());
 
 
