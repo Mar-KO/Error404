@@ -18,12 +18,12 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends AppCompatActivity {
 
     //instance représentant les infos qui seront entrées dans la page d'accueil
-
+    Account a;
     EditText email;
     EditText password;
     String sEmail,sPassword;
     String id;
-    boolean verdict=false;
+    boolean verdict=false,hasAdmin;
     //Instance pour entrer données dans firebase
     DatabaseReference db;
     @Override
@@ -35,11 +35,29 @@ public class MainActivity extends AppCompatActivity {
         //On va chercher les données entrées par l'utilisateur
         email= findViewById(R.id.userName);
         password=findViewById(R.id.password);
+        hasAdmin=false;
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    a=ds.getValue(Account.class);
+                    if("Admin".equals(a.getTypeOfAccount())){
+                        hasAdmin=true;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     //Méthode pour le bouton sign up de la page d'accueil. Amène vers une page sign up
     public void sighUpOnClick(View view){
         Intent intent= new Intent(this, SignupActivity.class);
+        intent.putExtra("HASADMIN",hasAdmin);
         startActivity(intent);
     }
 

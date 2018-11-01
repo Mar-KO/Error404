@@ -4,18 +4,28 @@ import java.util.Date;
 public class Account {
     //Instances de classes
     String typeOfAccount;
-    String passeword;
+    String password;
     String firstName;
     String lastName;
     String dateOfBirth;
     String email;
-    public Account(){}
-    public Account( String firstName, String lastName, String dateOfBirth, String email, String passeword){
 
-        this.passeword = passeword;
+    public Account(){}
+    public Account( String firstName, String lastName, String dateOfBirth, String email, String password){
+        this.lastName=lastName;
+        this.password = password;
         this.firstName = firstName;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
+    }
+
+    public Account( String firstName, String lastName, String dateOfBirth, String email, String password,String type){
+        this.lastName=lastName;
+        this.password = password;
+        this.firstName = firstName;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.typeOfAccount=type;
     }
     //Setters methods
     //In case the user has to change their info
@@ -24,7 +34,7 @@ public class Account {
         typeOfAccount = newTypeOfAccount;
     }
     public void setPasseword(String newPasseword){
-        passeword = newPasseword;
+        password = newPasseword;
     }
     public void setFirstName(String newFirstName){
         firstName = newFirstName;
@@ -44,7 +54,7 @@ public class Account {
         return typeOfAccount;
     }
     public String getPasseword() {
-        return passeword;
+        return password;
     }
     public String getFirstName() {
         return firstName;
