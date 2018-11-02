@@ -6,8 +6,8 @@ import java.util.List;
 public class AdminAccount extends Account {
     List<Service> services;
     public AdminAccount( String firstName, String lastName,
-                        String dateOfBirth, String email, String passeword){
-        super(firstName,lastName,dateOfBirth,email,passeword);
+                        String dateOfBirth, String email, String password){
+        super(firstName,lastName,dateOfBirth,email,password);
         setTypeOfAccount("Admin");
     }
 

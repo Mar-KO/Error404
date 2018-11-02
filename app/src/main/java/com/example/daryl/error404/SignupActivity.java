@@ -36,8 +36,8 @@ public class SignupActivity extends AppCompatActivity {
     private EditText emailEdit;
     private EditText passwordEdit;
     private Spinner accountTypeSpinner;
-    private static ArrayList<Account> accountList;
     DatabaseReference db;
+
 
     //Variables nécessaires à la création du spinner pour les dates
     private final String TAG = "MainActivity";
@@ -45,23 +45,28 @@ public class SignupActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
     //Les données que l'utilisateur rentre dans l'application
-    String firstName;
-    String lastName;
-    String dob;
-    String email;
-    String password;
-    String accountType;
+    private String firstName;
+    private String lastName;
+    private String dob;
+    private String email;
+    private String password;
+    private String accountType;
+    private Account account;
 
 
     //Variables boolean qui servira pour vérifier si un compte admin a déjà été créer
-    private boolean hasAdmin = false;
+    private boolean hasAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        accountList = new ArrayList<Account>();
+        //set the value of hasAdmin
+        Intent i=getIntent();
+        hasAdmin=i.getBooleanExtra("HASADMIN", false);
+
+
         db = FirebaseDatabase.getInstance().getReference();
         //Create a spinner to choose a date
         mDisplayDate = findViewById(R.id.setDate);
@@ -114,9 +119,8 @@ public class SignupActivity extends AppCompatActivity {
         email = emailEdit.getText().toString();
         password = passwordEdit.getText().toString();
         accountType = accountTypeSpinner.getSelectedItem().toString();
-        Account currentAccount = createAccount();
-        verifyAdmin();
-        if (hasAdmin == true && accountType=="Admin") {
+        account = createAccount();
+        if (accountType.equals("Admin") && verifyAdmin() ) {
             Toast.makeText(this, "There is already an Admin", Toast.LENGTH_SHORT).show();
         }
         else {
@@ -125,8 +129,7 @@ public class SignupActivity extends AppCompatActivity {
 
                 //ajoute le Account à firebase
                 String idDB = db.push().getKey();
-                db.child("users").child(idDB).setValue(currentAccount);
-                accountList.add(currentAccount);
+                db.child("users").child(idDB).setValue(account);
 
                 //Ouvre l'activité activity_Welome
                 Intent i = new Intent(this, WelcomeActivity.class);
@@ -147,26 +150,9 @@ public class SignupActivity extends AppCompatActivity {
                 dob == null || dob.isEmpty());
     }
 
-    //Méthode qui vérifie s'il y a déjà un administrateur
-    private void verifyAdmin() {
-
-        db.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Account account = ds.getValue(Account.class);
-                    if (account.getTypeOfAccount().equals("Admin")) {
-                        hasAdmin = true;
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
+    //Méthode qui retourne vrai s'il y a déjà un administrateur
+    private boolean verifyAdmin() {
+        return hasAdmin;
     }
 
     //creates an account depending on the type

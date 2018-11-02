@@ -37,7 +37,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         db.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds : dataSnapshot.getChildren()){
                     if(ds.getKey().equals(id)){
                         currentAccount=ds.getValue(Account.class);
